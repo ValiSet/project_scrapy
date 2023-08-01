@@ -9,7 +9,7 @@ class MySpider(scrapy.Spider):
 
     def parse(self, response):
         number_of_pages = self.number_page(response)
-        # Парсим ссылки на товары
+        # Parse links to products
         for link in response.css('div.ui-card__preview.ui-card__row.ui-card__row_size_default a::attr(href)'):
             yield response.follow(link, callback=self.parse_items)
 
@@ -18,10 +18,10 @@ class MySpider(scrapy.Spider):
             next_page = f'{base_url}?start={12 * i}'
             yield response.follow(next_page, callback=self.parse)
 
-        self.make_json(response.url)
+        self.make_json()
 
     def number_page(self, response):
-        # Получаем количество страниц в категории
+        # Get the number of pages in the category
         pagination_list = response.css('ul.ui-pagination__list')
         pagination_items = pagination_list.css('li')
         if len(pagination_items) >= 2:
@@ -34,7 +34,7 @@ class MySpider(scrapy.Spider):
         match = re.search(r"_(\d+)$", response.url)
         product_number = match.group(1) if match else None
 
-        # Парсим  данные товара
+        # Parse product data
         response_tags = response.css('div.goods-tags.goods-details-page__tags.text.text_size_small span::text').extract()
         tags = [tag.strip() for tag in response_tags]
         original_price_str = response.css('div.goods-offer-panel__price span::text').get()
@@ -45,7 +45,7 @@ class MySpider(scrapy.Spider):
             current = original
             result_sale = ((original - current) / original) * 100
 
-            sale_tag = f"Скидка {result_sale}%"
+            sale_tag = f"Discount {result_sale}%"
             availability = True
         else:
             original = 0.
@@ -83,9 +83,6 @@ class MySpider(scrapy.Spider):
         }
         self.results.append(result)
 
-    def make_json(self, url):
+    def make_json(self):
         with open(f'output_result.json', 'w', encoding='utf-8') as f:
             json.dump(self.results, f, ensure_ascii=False, indent=4)
-
-
-
