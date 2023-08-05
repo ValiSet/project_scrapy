@@ -100,7 +100,7 @@ class UpdateCookiesMiddleware:
     @classmethod
     def from_crawler(cls, crawler):
         return cls()
-
+    #Changing the query region to Tomsk
     def process_request(self, request, spider):
         self.cookies["city"] = "92"
         request.headers.setdefault(b"Cookie", self.cookies.output(header='', sep=';').encode('utf-8'))
