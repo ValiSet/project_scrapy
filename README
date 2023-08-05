@@ -1,0 +1,28 @@
+project_scrapy
+
+About:
+A simple website parser for https://apteka-ot-sklada.ru/, developed using the Scapy framework
+
+Basic Questions:
+
+- How to start the script?
+1. Open the Command Prompt in the script's folder
+2. Run the file start_project.py using the command: python3 start_project.py
+
+- How to choose the categories for parsing?
+1. Go to the website https://apteka-ot-sklada.ru/
+2. Pick the categories you want and copy their web addresses into the file urls.txt (located in the main script folder)
+
+-How to figure out the right value for my search area?
+1. Visit the website https://apteka-ot-sklada.ru/
+2. Choose your preferred location
+3. Open the developer console (press F12 in Chrome)
+4. Refresh the page
+5. Go to the Network tab -> Cookies
+6. Find the 'city' parameter under the 'name' column. Copy the value from the 'value' field
+7. Adjust the search area based on this value
+
+- How to change the search area? (Currently set to 92 - Tomsk)
+1. Open the file middlewares.py
+2. Look for the class 'UpdateCookiesMiddleware' and the method 'process_request'
+3. In the second line of the method, change the [city] cookie value from 92 to your desired value
